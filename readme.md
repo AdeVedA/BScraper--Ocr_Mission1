@@ -1,4 +1,5 @@
 # BScraper - OCR_Mission[1]
+------------------------------------------
 ## - Scraping de librairie en ligne "à la BeautifulSoup" -
 
 #### "Un Scraper sachant scraper sans Scrapy doit BeautifulSouper sans peur ni sans sampler..."
@@ -14,9 +15,10 @@ Les informations sur l'arborescence d'écriture des données figurent en IV
 
   #### A- Créez un repertoire pour le programme
 dans votre explorateur windows :
-créez un répertoire pour le programme où vous le souhaitez (CTRL+N) **nommez-le** 
-(ex. : dossier dans d:\chemin\de\mon\dossier)
-double-cliquez sur le répertoire créé pour vous y trouver
+créez un répertoire pour le programme où vous le souhaitez (CTRL+MAJ+N) **nommez-le**
+vous pouvez l'appeler BScraper.
+(ex. : BScraper dans d:\chemin\de\mon\dossier\BScraper)
+double-cliquez sur le répertoire créé pour vous trouver dedans.
 
   #### B- lancez l'interpréteur de commande windows
 clic gauche dans la barre d'adresse de l'explorateur, écrivez **"cmd"** et appuyez sur **"entrée"** :
