@@ -46,7 +46,7 @@ dans l'invite de commande, écrivez:
 	
 ## III - Lancement du programme
 
-	python BScraper_v44.py
+	python BScraper.py
 
 ## IV - informations sur la structure de données
 
