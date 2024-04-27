@@ -53,7 +53,7 @@ dans l'invite de commande, écrivez:
    les données sont toutes rassemblées et créées (en .csv) ou téléchargées (en .jpg) 
 dans un nouveau répertoire versionné à chaque lancement et une architecture de répertoire par catégorie ensuite :
 
-      racine/
+         racine/
       	    |---Catalogue_année.mois.jour_v0/
       	    |                               |----2_travel/
       	    |                               |            |-----travel.csv
