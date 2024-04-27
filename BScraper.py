@@ -1,9 +1,9 @@
-from datetime import date
+from datetime import date #on va utiliser la date pour organiser les dossiers de run
 import urllib.request
-from urllib.parse import urlparse
-import os
-import csv
-import requests
+from urllib.parse import urlparse #pour analyser une url et ensuite la spliter
+import os #pour les opérations sur le système de fichiers
+import csv #pour écrire le .csv
+import requests # requête http pour récupérer le html
 from bs4 import BeautifulSoup
 
 def book_categories(url_home): 
@@ -23,21 +23,17 @@ def book_categories(url_home):
 def livres_pages_categorie(url_categorie):
 
     # input la page d'accueil de la catégorie, 
-    # on récupère les liens de chaque livre 
+    # on récupère les liens de chaque livre dans liens_livres_cat
     # dans TOUTES les pages possibles d'une catégorie
-
     i = 1
     liens_livres_cat = []
     while True:
         response = requests.get(url_categorie)
         soup = BeautifulSoup(response.text, 'lxml')
-        # on récupère le bouts d'url spécifique à chaque livre et recompose/ajoute
-        # les adresses des livres de la catégorie dans liens_livres_cat
-
-        # on recrée tous les liens de catégorie à partir de balise html
+# on recrée tous les liens de catégorie à partir de balise html
         for h3 in soup.find_all('h3'):
             liens_livres_cat.append('http://books.toscrape.com/catalogue/' + h3.find('a')['href'][6:].replace("../", ""))
-        # et tant que le bouton 'next' existe,
+# et tant que le bouton 'next' existe,
         try:
             next_btn = soup.find('li', {'class':'next'}).find('a').text
             if next_btn is None:
@@ -45,7 +41,7 @@ def livres_pages_categorie(url_categorie):
                 print(f"urls des livres de {url_categorie} page {i} récupérées")
         except:
             return(liens_livres_cat)
-        # on itère sur le numéro de page et on recommence
+# on itère sur le numéro de page et on recommence
         i += 1
         url_categorie = (url_categorie[:-10] + 'page-' + str(i) + '.html')
 
@@ -57,10 +53,10 @@ def dossier_cat_csv(url_categorie):
     parts_categorie_x = url_cat_scrap.path.strip('/').split('/')[3].split('_')
     x_categorie = (parts_categorie_x[1] + '_' + parts_categorie_x[0])
     print(f'le dossier portera le nom de {x_categorie}')
-
-    # on se met de côté la variable dir_cat pour la destination des fichiers de la categorie
+    # on déclare dir_cat pour la destination des fichiers de la categorie
     dir_cat = os.path.join(catalog_dir, x_categorie)
-    # on crée le dossier de catégorie dans lequel seront créés téléchargés les csv jpg de cette catégorie
+    # on crée le dossier de catégorie dans lequel seront créés
+    # et téléchargés les csv jpg de cette catégorie
     os.makedirs(dir_cat, exist_ok=False)
     return(dir_cat)
 
@@ -88,8 +84,9 @@ def getdatas_livre (url_livre):
         etoiles, 'http://books.toscrape.com/' + str(img_couverture)]
     return champs_datas, datas
 
-def ecrire_csv_img(champs_datas,datas): # datas dans un csv & img dans le dossier        
+def ecrire_csv_img(champs_datas,datas):
 
+    # datas dans un csv puis csv & img dans le dossier
 # 3. Si c'est la première écriture du fichier de cette 'catégorie'.csv
     # on inscrit les champs_datas en header et les datas du 1er livre en dessous
         if not os.path.exists(os.path.join(dir_cat, f"{datas[7]}.csv")):
@@ -114,7 +111,7 @@ def ecrire_csv_img(champs_datas,datas): # datas dans un csv & img dans le dossie
 # on prend la date pour créer un dossier catalogue par requête v0 v1 v2... (Catalogue_2024.4.27_v0)
 today = date.today()
 year, month, day = map(str, (today.year, today.month, today.day))
-#initialiser i pour incrémenter si la version i existe
+# initialiser i pour incrémenter si la version i existe
 i = 0
 # catalog_dir = os.getcwd(), on ajoute 'Catalogue'_Année.Mois.Jour_v{i} : 
 # on cherche le prochain i dispo à l'écriture du dossier catalog_dir
