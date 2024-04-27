@@ -64,9 +64,8 @@ dans un nouveau répertoire versionné à chaque lancement et une architecture d
       	    |                               |----x_etc/
       	    |                               L----51_etc/
       	    L---Catalogue_année.mois.jour_v1/ ...
-
-
-***** Annexe A = installation de python
+------------------------------------------
+# Annexe A = installation de python
 
 Si vous n'avez pas installé Python, téléchargez-la dernière version sur **"https://www.python.org/downloads/"** et installez-le en vous assurant que **"Add to PATH"** est coché (laissez les autres choix par défaut)
 	
