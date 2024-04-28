@@ -28,10 +28,13 @@ BScraper est un programme de scraping récupérant des datas sur un site de vent
 ## I - Setup sous windows (si python 3.x n'est pas installé, commencez par l'annexe A)
 
   #### A- Créez un repertoire pour le programme
-dans votre explorateur windows (WIN+E) :
-créez un répertoire pour le programme où vous le souhaitez (CTRL+MAJ+N) **nommez-le**
+dans votre explorateur windows (WIN+E) 
+
+créez un répertoire (CTRL+MAJ+N) pour le programme où vous le souhaitez et **nommez-le**
+
 ex. : vous pouvez l'appeler BScraper dans d:\chemin\vers\mon\dossier\BScraper
-double-cliquez sur le répertoire créé pour être dedans.
+
+double-cliquez sur le répertoire créé (pour être dedans).
 
   #### B- lancez l'interpréteur de commande windows
 clic gauche dans la barre d'adresse de l'explorateur, écrivez **"cmd"** et appuyez sur **"entrée"** :
@@ -39,9 +42,9 @@ clic gauche dans la barre d'adresse de l'explorateur, écrivez **"cmd"** et appu
 	cmd
 	
   #### C- clonez le repo Github du projet
-dans l'invite de commande, écrivez:
+dans l'invite de commande (qui indique l'adresse du dossier créé normalement), écrivez:
 
-	git clone https://github.com/AdeVedA/OCRmission1.git
+	git clone https://github.com/AdeVedA/BScraper--Ocr_Mission1.git
  
 ## II - Installation d'un environnement virtuel
 
