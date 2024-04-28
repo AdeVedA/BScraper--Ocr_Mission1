@@ -63,7 +63,7 @@ dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier cr
   #### - pour désactiver l'environnement virtuel, tapez :
 
 	deactivate
-	
+
   ##### Bravo on a fini la préparation de l'environnement ! normalement on n'y touche plus !
 	
 ## III - Lancement du programme
@@ -73,9 +73,9 @@ dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier cr
 ## IV - informations sur la structure de données
 
    les données sont toutes rassemblées et créées (en .csv) ou téléchargées (en .jpg) 
-dans le sous-répertoire de catégorie du livre (2_travel, 3_mystery, 4_...)
-dans le répertoire Catalogue (versionné à chaque lancement du programme)
-et une architecture de répertoire par catégorie ensuite :
+dans les sous-répertoires des catégories des livres (2_travel, 3_mystery, 4_...)
+qui sont dans le répertoire Catalogue (versionné à chaque lancement du programme).
+Nous avons donc en sortie de run une architecture de répertoire par catégorie suivante :
 
       racine_projet/
 
