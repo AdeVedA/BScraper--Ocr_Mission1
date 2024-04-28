@@ -1,12 +1,13 @@
 from datetime import date #on va utiliser la date pour organiser les dossiers de run
-import urllib.request
+import urllib.request #pour obtenir et sauvegarder l'image .jpg
 from urllib.parse import urlparse #pour analyser une url et ensuite la spliter
 import os #pour les opérations sur le système de fichiers
 import csv #pour écrire le .csv
 import requests # requête http pour récupérer le html
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup #pour obtenir des infos à partir des fichiers html
 
-def book_categories(url_home): 
+def book_categories(url_home):
+
 # utilisée 1fois, on recupère les adresses mères de chaque catégorie
 
     response = requests.get(url_home)
@@ -22,9 +23,9 @@ def book_categories(url_home):
 
 def livres_pages_categorie(url_categorie):
 
-    # input la page d'accueil de la catégorie, 
+    # input : la page d'accueil de la catégorie, 
     # on récupère les liens de chaque livre dans liens_livres_cat
-    # dans TOUTES les pages possibles d'une catégorie
+    # dans TOUTES les pages possibles d'une catégorie on itère les numréos de pages tant que bouton 'next' existe
     i = 1
     liens_livres_cat = []
     while True:
