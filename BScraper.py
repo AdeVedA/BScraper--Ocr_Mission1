@@ -1,14 +1,14 @@
-from datetime import date #on va utiliser la date pour organiser les dossiers de run
-import urllib.request #pour obtenir et sauvegarder l'image .jpg
-from urllib.parse import urlparse #pour analyser une url et ensuite la spliter
+from datetime import date # utiliser la date pour nommer le dossier d'un run
 import os #pour les opérations sur le système de fichiers
-import csv #pour écrire le .csv
 import requests # requête http pour récupérer le html
 from bs4 import BeautifulSoup #pour obtenir des infos à partir des fichiers html
+from urllib.parse import urlparse #pour analyser une url et ensuite la spliter
+import csv #pour écrire le .csv
+import urllib.request #pour de l'url obtenir et sauvegarder l'image .jpg
 
 def book_categories(url_home):
 
-# utilisée 1fois, on recupère les adresses mères de chaque catégorie
+    # utilisée 1fois, on recupère les adresses mères de chaque catégorie
 
     response = requests.get(url_home)
     if response.ok:
@@ -89,12 +89,12 @@ def write_csv_img(datas_headers,datas):
 
     # datas dans un csv puis csv & img dans le dossier
 # 3. Si c'est la première écriture du fichier de cette 'catégorie'.csv
-    # on inscrit les datas_headers en header et les datas du 1er livre en dessous
+# on inscrit les datas_headers en header et les datas du 1er livre en dessous
         if not os.path.exists(os.path.join(categ_folder, f"{datas[7]}.csv")):
             with open(os.path.join(categ_folder, f"{datas[7]}.csv"), 'w', encoding='utf8', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(datas_headers)
-    # si le fichier csv existe déjà (livre n° >= 2), on ajoute les données en dessous dans le csv
+# si le fichier csv existe déjà (livre n° >= 2), on ajoute les données en dessous dans le csv
         with open(os.path.join(categ_folder, f"{datas[7]}.csv"), 'a', encoding='utf8', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(datas)
@@ -105,6 +105,8 @@ def write_csv_img(datas_headers,datas):
         nom_fichier_image = datas[2]
         for char in ':/*?"<>|':
             nom_fichier_image = nom_fichier_image.replace(char, '')
+        # nom_fichier_image = table_tds[0].text # pour nommer le fichier image par son UPC,
+        # le nom sera plus stable. mettez en commentaire les trois lignes précédentes
         urllib.request.urlretrieve(f"{datas[-1]}", os.path.join(categ_folder, f"{nom_fichier_image}.jpg"))
         print(f"image sauvegardée avec succès dans {nom_fichier_image}.jpg")
 
