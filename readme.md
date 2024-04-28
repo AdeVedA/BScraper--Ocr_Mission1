@@ -12,11 +12,11 @@ BScraper est un programme de scraping récupérant des datas sur un site de vent
 
 3. il explore la pagination et récupère les urls des livres d'une catégorie
 
-4. j'itère pour chaque catégorie :
+4. il itère pour chaque catégorie :
 
 - a. création d'un dossier du nom ré-ordonné de la catégorie 
 
-- b. on itère pour chaque livre de cette catégorie :
+- b. il itère pour chaque livre de cette catégorie :
 
 - - b1. récupération/ajout des datas dans le csv de la catégorie 
 
