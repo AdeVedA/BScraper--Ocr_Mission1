@@ -91,7 +91,7 @@ Nous avons donc en sortie de run une architecture de répertoire par catégorie 
       	    └───Catalogue_2024.04.30_v1/...
 
 
-***** Annexe A = installation de python
+# Annexe A = installation de python
 
-Si vous n'avez pas installé Python, téléchargez-la dernière version sur **"https://www.python.org/downloads/"** et installez-le en vous assurant que **"Add to PATH"** est coché (laissez les autres choix par défaut)
+Si vous n'avez pas installé Python, téléchargez-la dernière version (ou 3.6+ minimum) sur **"https://www.python.org/downloads/"** et installez-le en vous assurant que **"Add to PATH"** est coché (laissez les autres choix par défaut)
 	
