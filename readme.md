@@ -16,7 +16,7 @@ BScraper est un programme de scraping récupérant des datas sur un site de vent
 
 - a. création d'un dossier du nom ré-ordonné de la catégorie 
 
-- b. on itère pour chaque livre
+- b. on itère pour chaque livre de cette catégorie :
 
 - - b1. récupération/ajout des datas dans le csv de la catégorie 
 
@@ -91,7 +91,7 @@ Nous avons donc en sortie de run une architecture de répertoire par catégorie 
       	    └───Catalogue_2024.04.30_v1/...
 
 
-# Annexe A = installation de python
+# Annexe A - installation de python
 
 Si vous n'avez pas installé Python, téléchargez-la dernière version (ou 3.6+ minimum) sur **"https://www.python.org/downloads/"** et installez-le en vous assurant que **"Add to PATH"** est coché (laissez les autres choix par défaut)
 	
