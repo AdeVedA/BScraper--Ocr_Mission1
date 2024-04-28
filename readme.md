@@ -10,22 +10,23 @@ BScraper est un programme de scraping récupérant des datas sur un site de vent
 
 2. il télécharge les liens des catégories
 
-3. il explore la pagination et récupère les urls des livres d'une catégorie
+3. il récupère les urls des livres en explorant les pages possibles d'une catégorie
 
-4. il itère pour chaque catégorie :
+4. il itère pour chaque catégorie (avec fonctions distinctes) la suite :
 
-- a. création d'un dossier du nom ré-ordonné de la catégorie 
+- a. création d'un dossier au nom réordonné \2_travel \3_mystery
+pour visualiser les répertoires des catégories selon books.toscrape
 
-- b. il itère pour chaque livre de cette catégorie :
+- b. il itère pour chaque livre de cette catégorie et remplit ce dossier de :
 
-- - b1. récupération/ajout des datas dans le csv de la catégorie 
+- - b1. récupération/ajout des datas dans le .csv de la catégorie 
 
-- - b2. téléchargement/sauvegarde de l'image du livre en .jpg nommé selon son titre.
+- - b2. téléchargement de l'image du livre en .jpg nommé selon son titre.
 
 
 ------------------------------------------
 
-## I - Setup windows (si python 3.x n'est pas installé, commencez par l'annexe A)
+## I - Setup windows (si python 3.6+ n'est pas installé, commencez par l'annexe A)
 
   #### A- Créez un repertoire pour le programme
 dans votre explorateur windows (WIN+E) 
@@ -37,7 +38,8 @@ ex. : vous pouvez l'appeler BScraper dans d:\chemin\vers\mon\dossier\BScraper
 double-cliquez sur le répertoire créé (pour être dedans).
 
   #### B- lancez l'interpréteur de commande windows
-clic gauche dans la barre d'adresse de l'explorateur, écrivez **"cmd"** et appuyez sur **"entrée"** :
+clic gauche dans la barre d'adresse de l'explorateur, écrivez **"cmd"** (à la place de l'adresse)
+et appuyez sur **"entrée"** :
 
 	cmd
 	
@@ -56,7 +58,7 @@ dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier cr
 	
 	env\Scripts\activate.bat
  
-  #### - pour y installer les librairies, tapez :
+  #### - pour y installer les librairies requises, tapez :
 	
 	pip install -r requirements.txt
 
@@ -74,8 +76,8 @@ dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier cr
 
    les données sont toutes rassemblées et créées (en .csv) ou téléchargées (en .jpg) 
 dans les sous-répertoires des catégories des livres (2_travel, 3_mystery, 4_...)
-qui sont dans le répertoire Catalogue (versionné à chaque lancement du programme).
-Nous avons donc en sortie de run une architecture de répertoire par catégorie suivante :
+qui sont dans le répertoire Catalogue_2024425_v0 (versionné v1 v2... à chaque lancement du programme).
+Nous avons donc en sortie de run l'architecture de répertoire par catégorie suivante :
 
       racine_projet/
 
@@ -86,8 +88,8 @@ Nous avons donc en sortie de run une architecture de répertoire par catégorie 
       	    |                          |            ├─────bookname2.jpg
       	    |                          |            └─────...
       	    |                          ├────3_mystery/
-      	    |                          ├────51_etc/
-      	    |                          └────x_etc/
+      	    |                          ├────51_crime/
+      	    |                          └────x_nouveau/...
       	    └───Catalogue_2024.04.30_v1/...
 
 
