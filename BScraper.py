@@ -21,54 +21,54 @@ def book_categories(url_home):
     else:
         print("Veuillez vérifier la connexion ou l'installation de l'environnement, code erreur : ", reponse)
 
-def livres_pages_categorie(url_categorie):
+def books_urls_category(url_category):
 
     # input : la page d'accueil de la catégorie, 
-    # on récupère les liens de chaque livre dans liens_livres_cat
+    # on récupère les liens de chaque livre dans allbooks_urls_cat
     # dans TOUTES les pages possibles d'une catégorie on itère les numréos de pages tant que bouton 'next' existe
     i = 1
-    liens_livres_cat = []
+    allbooks_urls_cat = []
     while True:
-        response = requests.get(url_categorie)
+        response = requests.get(url_category)
         soup = BeautifulSoup(response.text, 'lxml')
 # on recrée tous les liens de catégorie à partir de balise html
         for h3 in soup.find_all('h3'):
-            liens_livres_cat.append('http://books.toscrape.com/catalogue/' + h3.find('a')['href'][6:].replace("../", ""))
+            allbooks_urls_cat.append('http://books.toscrape.com/catalogue/' + h3.find('a')['href'][6:].replace("../", ""))
 # et tant que le bouton 'next' existe,
         try:
             next_btn = soup.find('li', {'class':'next'}).find('a').text
             if next_btn is None:
-                return(liens_livres_cat)
-                print(f"urls des livres de {url_categorie} page {i} récupérées")
+                return(allbooks_urls_cat)
+                print(f"urls des livres de {url_category} page {i} récupérées")
         except:
-            return(liens_livres_cat)
+            return(allbooks_urls_cat)
 # on itère sur le numéro de page et on recommence
         i += 1
-        url_categorie = (url_categorie[:-10] + 'page-' + str(i) + '.html')
+        url_category = (url_category[:-10] + 'page-' + str(i) + '.html')
 
-def dossier_cat_csv(url_categorie):
+def dossier_cat_csv(url_category):
     
     # on crée un repertoire pour une catégorie
 # 1. input = url-categorie / url tree parsing / pour recréer un nom ordonné de répertoire "x-catégorie"
-    url_cat_scrap = urlparse(url_categorie)
+    url_cat_scrap = urlparse(url_category)
     parts_categorie_x = url_cat_scrap.path.strip('/').split('/')[3].split('_')
     x_categorie = (parts_categorie_x[1] + '_' + parts_categorie_x[0])
     print(f'le dossier portera le nom de {x_categorie}')
-    # on déclare dir_cat pour la destination des fichiers de la categorie
-    dir_cat = os.path.join(catalog_dir, x_categorie)
+    # on déclare categ_folder pour la destination des fichiers de la categorie
+    categ_folder = os.path.join(catalog_folder, x_categorie)
     # on crée le dossier de catégorie dans lequel seront créés
     # et téléchargés les csv jpg de cette catégorie
-    os.makedirs(dir_cat, exist_ok=False)
-    return(dir_cat)
+    os.makedirs(categ_folder, exist_ok=False)
+    return(categ_folder)
 
-def getdatas_livre (url_livre):
+def getdatas_book (book_url):
 
     # on récupère les datas des livres
 # 2. on crée deux listes : catégories et datas et une adresse image          
-    reponse = requests.get(url_livre)
+    reponse = requests.get(book_url)
     soup = BeautifulSoup(reponse.text.encode('latin1').decode('utf-8'), 'lxml')
-# datas à scraper par livre sur sa page url_livre:
-    url_livre = url_livre + " "
+# datas à scraper par livre sur sa page book_url:
+    book_url = book_url + " "
     # tableau avec 4datas en lignes[0:6] UPC,...,prix,prix+taxe,...,dispos
     table_tds = soup.findAll('td') 
     prod_dispos = table_tds[5].text[10:-11]
@@ -78,24 +78,24 @@ def getdatas_livre (url_livre):
     etoiles = soup.find('div', {'class': 'col-sm-6 product_main'}).findAll('p')[2].attrs['class'][1]
     img_couverture = soup.find('div', {'class': 'item active'}).find('img').attrs['src'][6:]
 # deux listes de datas : les champs communs et les datas d'un livre 
-    champs_datas = ['product_page_url', 'universal_product_code(UPC)', 'title','price_including_tax',
+    datas_headers = ['product_page_url', 'universal_product_code(UPC)', 'title','price_including_tax',
         'price_excluding_tax', 'number_available', 'product_description', 'category', 'review_rating', 'image_url']
-    datas = [url_livre, table_tds[0].text, titre_h, table_tds[3].text[1:],
+    datas = [book_url, table_tds[0].text, titre_h, table_tds[3].text[1:],
         table_tds[2].text[1:], prod_dispos, str(prod_description), categorie,
         etoiles, 'http://books.toscrape.com/' + str(img_couverture)]
-    return champs_datas, datas
+    return datas_headers, datas
 
-def ecrire_csv_img(champs_datas,datas):
+def write_csv_img(datas_headers,datas):
 
     # datas dans un csv puis csv & img dans le dossier
 # 3. Si c'est la première écriture du fichier de cette 'catégorie'.csv
-    # on inscrit les champs_datas en header et les datas du 1er livre en dessous
-        if not os.path.exists(os.path.join(dir_cat, f"{datas[7]}.csv")):
-            with open(os.path.join(dir_cat, f"{datas[7]}.csv"), 'w', encoding='utf8', newline='') as csvfile:
+    # on inscrit les datas_headers en header et les datas du 1er livre en dessous
+        if not os.path.exists(os.path.join(categ_folder, f"{datas[7]}.csv")):
+            with open(os.path.join(categ_folder, f"{datas[7]}.csv"), 'w', encoding='utf8', newline='') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow(champs_datas)
+                writer.writerow(datas_headers)
     # si le fichier csv existe déjà (livre n° >= 2), on ajoute les données en dessous dans le csv
-        with open(os.path.join(dir_cat, f"{datas[7]}.csv"), 'a', encoding='utf8', newline='') as csvfile:
+        with open(os.path.join(categ_folder, f"{datas[7]}.csv"), 'a', encoding='utf8', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(datas)
         print(f"datas de '{datas[2]}' écrites avec succès dans {datas[7]}.csv")
@@ -105,7 +105,7 @@ def ecrire_csv_img(champs_datas,datas):
         nom_fichier_image = datas[2]
         for char in ':/*?"<>|':
             nom_fichier_image = nom_fichier_image.replace(char, '')
-        urllib.request.urlretrieve(f"{datas[-1]}", os.path.join(dir_cat, f"{nom_fichier_image}.jpg"))
+        urllib.request.urlretrieve(f"{datas[-1]}", os.path.join(categ_folder, f"{nom_fichier_image}.jpg"))
         print(f"image sauvegardée avec succès dans {nom_fichier_image}.jpg")
 
 
@@ -114,23 +114,23 @@ today = date.today()
 year, month, day = map(str, (today.year, today.month, today.day))
 # initialiser i pour incrémenter si la version i existe
 i = 0
-# catalog_dir = os.getcwd(), on ajoute 'Catalogue'_Année.Mois.Jour_v{i} : 
-# on cherche le prochain i dispo à l'écriture du dossier catalog_dir
+# catalog_folder = os.getcwd(), on ajoute 'Catalogue'_Année.Mois.Jour_v{i} : 
+# on cherche le prochain i dispo à l'écriture du dossier catalog_folder
 while os.path.exists(os.path.join(os.getcwd(), os.path.join('Catalogue' + f'_{year}.{month}.{day}_v{i}'))):
     i += 1
-catalog_dir = os.path.join(os.getcwd(), os.path.join('Catalogue' + f'_{year}.{month}.{day}_v{i}'))
-# on créer le dossier pour ce téléchargement, on travaillera dans catalog_dir pour toute la session
-os.makedirs(catalog_dir, exist_ok=False)
-print(f'vos répertoires et fichiers seront dans l\'arborescence du répertoire {catalog_dir}\\')
+catalog_folder = os.path.join(os.getcwd(), os.path.join('Catalogue' + f'_{year}.{month}.{day}_v{i}'))
+# on créer le dossier pour ce téléchargement, on travaillera dans catalog_folder pour toute la session
+os.makedirs(catalog_folder, exist_ok=False)
+print(f'vos répertoires et fichiers seront dans l\'arborescence du répertoire {catalog_folder}\\')
 
 url_home = 'http://books.toscrape.com/index.html'
 urls_categories = book_categories(url_home) # utilisée 1fois, 
 # on a recupéré les urls mères de chaque catégorie
 
-for url_categorie in urls_categories[1:]:
-    liens_livres_cat = livres_pages_categorie(url_categorie)
-    dir_cat = dossier_cat_csv(url_categorie)
-    for url_livre in liens_livres_cat:
-        champs_datas, datas = getdatas_livre(url_livre)
-        ecrire_csv_img(champs_datas, datas)
-    print(f'la/les pages {url_categorie} ont été sauvegardées dans un csv avec les images des livres')
+for url_category in urls_categories[1:]:
+    allbooks_urls_cat = books_urls_category(url_category)
+    categ_folder = dossier_cat_csv(url_category)
+    for book_url in allbooks_urls_cat:
+        datas_headers, datas = getdatas_book(book_url)
+        write_csv_img(datas_headers, datas)
+    print(f'la/les pages {url_category} ont été sauvegardées dans un csv avec les images des livres')
