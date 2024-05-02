@@ -81,6 +81,7 @@ dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier cr
 
 les données sont toutes transformées/rassemblées et créées (en .csv) ou téléchargées (en .jpg) dans les sous-répertoires des catégories des livres (2_travel, 3_mystery, 4_...) qui sont dans le répertoire Catalogue_v0 (versionné v1 v2... à chaque lancement du programme).
 Nous avons donc en sortie de run l'architecture de répertoires par catégorie suivante :
+
 	racine_projet/
 	      	    ├───Catalogue_v0/
 	      	    |               ├────2_travel/
