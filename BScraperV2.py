@@ -98,7 +98,7 @@ def getdatas_book (book_url):
 
 def write_csv_img(datas,images_folder,book_url):
     # ajout des datas de chaque livre de la catégorie dans le CSV de la categorie
-    with open(os.path.join(categ_folder, f"{datas[7]}.csv"), 'a',
+    with open(os.path.join(categ_folder, f"{categ_folder.split('\\')[6].split('_')[1]}.csv"), 'a',
              encoding='utf8', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(datas)
