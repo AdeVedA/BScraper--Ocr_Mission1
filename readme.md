@@ -7,7 +7,7 @@
 ------------------------------------------
 BScraper est un programme de scraping récupérant des datas sur un site de vente en ligne de livres http://books.toscrape.com/
 
-1. il crée un dossier catalogue versionné catalogue_v0 , v1 , v2...
+1. il crée un dossier catalogue versionné catalogue_v0 , v1...
 
 2. il télécharge les liens des catégories
 
