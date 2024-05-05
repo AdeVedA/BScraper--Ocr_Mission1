@@ -1,138 +1,132 @@
-from datetime import date # utiliser la date pour nommer le dossier d'un run
-import os #pour les opérations sur le système de fichiers
-import requests # requête http pour récupérer le html
-from bs4 import BeautifulSoup #pour obtenir des infos à partir des fichiers html
-from urllib.parse import urlparse #pour analyser une url et ensuite la spliter
-import csv #pour écrire le .csv
-import urllib.request #pour de l'url obtenir et sauvegarder l'image .jpg
+import os
+import requests
+from bs4 import BeautifulSoup
+import csv
+
 
 def book_categories(url_home):
-
-    # utilisée 1fois, on recupère les adresses mères de chaque catégorie
-
+    """ à partir de l'url_home récupèrer les adresses mères
+    de chaque catégorie dans urls_categories
+    """
     response = requests.get(url_home)
-    if response.ok:
-        soup = BeautifulSoup(response.text, 'lxml')
-        urls_categories = []
-        for categ_tag in soup.find('ul', {'class': 'nav nav-list'}).findAll('a'):
-            urls_categories.append('http://books.toscrape.com/' + categ_tag.get('href'))
-        return urls_categories
-        print("url des catégories récupérées")
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'lxml')
+        urls_categories  = [f"{url_home}{categ_tag.get('href')}" 
+                            for categ_tag in soup.find("ul", {"class": "nav nav-list"}).find_all("a")]
     else:
-        print("Veuillez vérifier la connexion ou l'installation de l'environnement, code erreur : ", reponse)
+        print(f"Veuillez vérifier la connexion internet (à {url_home}) puis relancer le programme, code erreur : {response.status_code}")
+        sys.exit()
+    return urls_categories
 
-def books_urls_category(url_category):
+def foldering_catalog():
+    """ on crée un dossier catalogue incrémenté dans lequel le run inscrira les datas
+    """
+    i = 0
+    while os.path.exists(os.path.join(os.getcwd(), f"Catalogue_v{i}")):
+        i += 1
+    catalog_folder = os.path.join(os.getcwd(), f"Catalogue_v{i}")
+    os.makedirs(catalog_folder, exist_ok=False)
+    return catalog_folder
 
-    # input : la page d'accueil de la catégorie, 
-    # on récupère les liens de chaque livre dans allbooks_urls_cat
-    # dans TOUTES les pages possibles d'une catégorie on itère les numréos de pages tant que bouton 'next' existe
+def books_cat_explorer(url_category):
+    """ input = page d'accueil de la catégorie, on récupère les urls
+    de chaque livre (sortie = liste [allbooks_urls_cat]) dans TOUTES les pages possibles
+    d'une catégorie avec iteration sur numéro de pages à la fin du while tant que bouton 'next' existe
+    """
     i = 1
     allbooks_urls_cat = []
     while True:
         response = requests.get(url_category)
         soup = BeautifulSoup(response.text, 'lxml')
-# on recrée tous les liens de catégorie à partir de balise html
         for h3 in soup.find_all('h3'):
-            allbooks_urls_cat.append('http://books.toscrape.com/catalogue/' + h3.find('a')['href'][6:].replace("../", ""))
-# et tant que le bouton 'next' existe,
+            allbooks_urls_cat.append('http://books.toscrape.com/catalogue/' 
+            + h3.find('a')['href'][6:].replace("../", ""))
         try:
             next_btn = soup.find('li', {'class':'next'}).find('a').text
             if next_btn is None:
-                return(allbooks_urls_cat)
-                print(f"urls des livres de {url_category} page {i} récupérées")
+                return allbooks_urls_cat
         except:
-            return(allbooks_urls_cat)
-# on itère sur le numéro de page et on recommence
+            return allbooks_urls_cat
         i += 1
         url_category = (url_category[:-10] + 'page-' + str(i) + '.html')
-
-def dossier_cat_csv(url_category):
     
-    # on crée un repertoire pour une catégorie
-# 1. input = url-categorie / url tree parsing / pour recréer un nom ordonné de répertoire "x-catégorie"
-    url_cat_scrap = urlparse(url_category)
-    parts_categorie_x = url_cat_scrap.path.strip('/').split('/')[3].split('_')
-    x_categorie = (parts_categorie_x[1] + '_' + parts_categorie_x[0])
-    print(f'le dossier portera le nom de {x_categorie}')
-    # on déclare categ_folder pour la destination des fichiers de la categorie
-    categ_folder = os.path.join(catalog_folder, x_categorie)
-    # on crée le dossier de catégorie dans lequel seront créés
-    # et téléchargés les csv jpg de cette catégorie
+
+def foldering_xcategory(url_category,catalog_folder):
+    """ on extrait d'url-category 'travel_2' dans une liste pour en transformer le nom
+    et créer un répertoire catégorie du type '2_travel'
+    puis on crée un répertoire "images" dans le répertoire catégorie
+    """
+    parts_category_x = url_category.split('/')[6].split('_')
+    categ_folder = os.path.join(catalog_folder, f"{parts_category_x[1]}_{parts_category_x[0]}")
     os.makedirs(categ_folder, exist_ok=False)
-    return(categ_folder)
+    images_folder = os.path.join(categ_folder, "images")
+    os.makedirs(images_folder, exist_ok=False)
+    return categ_folder,images_folder
+
+def csv_file_init(categ_folder):
+    """ création du .CSV d'une catégorie dans son dossier et écriture des datas_headers en en-tête
+    """
+    datas_headers = [
+        'product_page_url', 'universal_product_code (upc)', 'title',
+         'price_including_tax', 'price_excluding_tax', 'number_available',
+          'product_description', 'category', 'review_rating',
+           'image_url'
+           ]
+    with open(os.path.join(categ_folder, f"{categ_folder.split('\\')[6].split('_')[1]}.csv"), 'w',
+                 encoding='utf8', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(datas_headers)
 
 def getdatas_book (book_url):
-
-    # on récupère les datas des livres
-# 2. on crée deux listes : catégories et datas et une adresse image          
+    """ on récupère toutes les datas=[] d'un livre
+    """
     reponse = requests.get(book_url)
-    soup = BeautifulSoup(reponse.text.encode('latin1').decode('utf-8'), 'lxml')
-# datas à scraper par livre sur sa page book_url:
+    soup = BeautifulSoup(reponse.text.encode('utf-8').decode('utf-8'), 'lxml')
     book_url = book_url + " "
-    # tableau avec 4datas en lignes[0:6] UPC,...,prix,prix+taxe,...,dispos
     table_tds = soup.findAll('td') 
     prod_dispos = table_tds[5].text[10:-11]
     titre_h = soup.find('h1').text
-    prod_description = soup.find('article', {'class': 'product_page'}).findAllNext('p')[3].contents[0][:-8]
+    prod_description = soup.find('article', {'class': 'product_page'}).findAllNext('p')[3].contents[0][:-8]   
     categorie = soup.find('ul', {'class': 'breadcrumb'}).findAll('li')[2].find('a').text
     etoiles = soup.find('div', {'class': 'col-sm-6 product_main'}).findAll('p')[2].attrs['class'][1]
     img_couverture = soup.find('div', {'class': 'item active'}).find('img').attrs['src'][6:]
-# deux listes de datas : les champs communs et les datas d'un livre 
-    datas_headers = ['product_page_url', 'universal_product_code(UPC)', 'title','price_including_tax',
-        'price_excluding_tax', 'number_available', 'product_description', 'category', 'review_rating', 'image_url']
-    datas = [book_url, table_tds[0].text, titre_h, table_tds[3].text[1:],
-        table_tds[2].text[1:], prod_dispos, str(prod_description), categorie,
-        etoiles, 'http://books.toscrape.com/' + str(img_couverture)]
-    return datas_headers, datas
 
-def write_csv_img(datas_headers,datas):
+    datas = [
+        book_url, table_tds[0].text, titre_h,
+         table_tds[3].text[1:], table_tds[2].text[1:], prod_dispos,
+          str(prod_description), categorie, etoiles,
+           'http://books.toscrape.com/' + str(img_couverture)
+           ]
+    return datas
 
-    # datas dans un csv puis csv & img dans le dossier
-# 3. Si c'est la première écriture du fichier de cette 'catégorie'.csv
-# on inscrit les datas_headers en header et les datas du 1er livre en dessous
-        if not os.path.exists(os.path.join(categ_folder, f"{datas[7]}.csv")):
-            with open(os.path.join(categ_folder, f"{datas[7]}.csv"), 'w', encoding='utf8', newline='') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow(datas_headers)
-# si le fichier csv existe déjà (livre n° >= 2), on ajoute les données en dessous dans le csv
-        with open(os.path.join(categ_folder, f"{datas[7]}.csv"), 'a', encoding='utf8', newline='') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow(datas)
-        print(f"datas de '{datas[2]}' écrites avec succès dans {datas[7]}.csv")
+def write_csv_img(datas,images_folder,book_url):
+    """ ajout des datas de chaque livre de la catégorie dans le CSV de la categorie
+    puis sauvegarde de l'IMAGE nommée à partir du nom du livre dans l'url
+    """
+    with open(os.path.join(categ_folder, f"{categ_folder.split('\\')[6].split('_')[1]}.csv"), 'a',
+             encoding='utf8', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(datas)
+    with open(os.path.join(images_folder, f"{book_url.rsplit("/", 2)[-2].rsplit("_", 1)[0]}.jpg"), 'wb') as img_f:
+        img_data = requests.get(f"{datas[-1]}").content
+        img_f.write(img_data)
 
-# 4. on va sauvegarder l'image nommée à partir du 
-# titre nettoyé de caractères interdits pour filename
-        nom_fichier_image = datas[2]
-        for char in ':/*?"<>|':
-            nom_fichier_image = nom_fichier_image.replace(char, '')
-        # nom_fichier_image = table_tds[0].text # pour nommer le fichier image par son UPC,
-        # le nom sera plus stable. mettez en commentaire les trois lignes précédentes
-        urllib.request.urlretrieve(f"{datas[-1]}", os.path.join(categ_folder, f"{nom_fichier_image}.jpg"))
-        print(f"image sauvegardée avec succès dans {nom_fichier_image}.jpg")
+""" on récupère les urls des catégories sur la page d'accueil 
+    et on crée le repertoire de sauvegarde de la session de scraping
+"""
+url_home = 'http://books.toscrape.com/'
+urls_categories = book_categories(url_home)
+catalog_folder = foldering_catalog()
 
-
-# on prend la date pour créer un dossier catalogue par requête v0 v1 v2... (Catalogue_2024.4.27_v0)
-today = date.today()
-year, month, day = map(str, (today.year, today.month, today.day))
-# initialiser i pour incrémenter si la version i existe
-i = 0
-# catalog_folder = os.getcwd(), on ajoute 'Catalogue'_Année.Mois.Jour_v{i} : 
-# on cherche le prochain i dispo à l'écriture du dossier catalog_folder
-while os.path.exists(os.path.join(os.getcwd(), os.path.join('Catalogue' + f'_{year}.{month}.{day}_v{i}'))):
-    i += 1
-catalog_folder = os.path.join(os.getcwd(), os.path.join('Catalogue' + f'_{year}.{month}.{day}_v{i}'))
-# on créer le dossier pour ce téléchargement, on travaillera dans catalog_folder pour toute la session
-os.makedirs(catalog_folder, exist_ok=False)
-print(f'vos répertoires et fichiers seront dans l\'arborescence du répertoire {catalog_folder}\\')
-
-url_home = 'http://books.toscrape.com/index.html'
-urls_categories = book_categories(url_home) # utilisée 1fois, 
-# on a recupéré les urls mères de chaque catégorie
-
+""" deux boucles 'for' pour télécharger dans chaque
+    catégorie(ses livres=allbooks_urls_cat) chaque livre(datas)
+"""
 for url_category in urls_categories[1:]:
-    allbooks_urls_cat = books_urls_category(url_category)
-    categ_folder = dossier_cat_csv(url_category)
+    allbooks_urls_cat = books_cat_explorer(url_category)
+    categ_folder,images_folder = foldering_xcategory(url_category,catalog_folder)
+    csv_file_init(categ_folder)
     for book_url in allbooks_urls_cat:
-        datas_headers, datas = getdatas_book(book_url)
-        write_csv_img(datas_headers, datas)
-    print(f'la/les pages {url_category} ont été sauvegardées dans un csv avec les images des livres')
+        datas = getdatas_book(book_url)
+        write_csv_img(datas,images_folder,book_url)
+    print(f'images & datas des livres de la catégorie " {url_category.split('/')[6].split('_')[0]} " sauvegardées avec succès')
+print(f'le BScraping de books.toscrape.com est terminé, bonne journée !')
