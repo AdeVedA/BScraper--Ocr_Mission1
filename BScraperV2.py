@@ -6,7 +6,7 @@ import csv
 
 def book_categories(url_home):
     """ à partir de l'url_home récupèrer les adresses mères
-    de chaque catégorie dans url categorie
+    de chaque catégorie dans urls_categories
     """
     response = requests.get(url_home)
     if response.status_code == 200:
@@ -14,12 +14,13 @@ def book_categories(url_home):
         urls_categories  = [f"{url_home}{categ_tag.get('href')}" 
                             for categ_tag in soup.find("ul", {"class": "nav nav-list"}).find_all("a")]
     else:
-        print(f"Veuillez vérifier la connexion (à {url_home}) ou l'installation de l'environnement puis relancer le programme, code erreur : {response.status_code}")
+        print(f"Veuillez vérifier la connexion internet (à {url_home}) puis relancer le programme, code erreur : {response.status_code}")
         sys.exit()
     return urls_categories
 
 def foldering_catalog():
-    # on crée un dossier catalogue incrémenté dans lequel le run inscrira les datas
+    """ on crée un dossier catalogue incrémenté dans lequel le run inscrira les datas
+    """
     i = 0
     while os.path.exists(os.path.join(os.getcwd(), f"Catalogue_v{i}")):
         i += 1
@@ -30,7 +31,7 @@ def foldering_catalog():
 def books_cat_explorer(url_category):
     """ input = page d'accueil de la catégorie, on récupère les urls
     de chaque livre (sortie = liste [allbooks_urls_cat]) dans TOUTES les pages possibles
-    d'une catégorie avec iteration sur numéro de pages tant que bouton 'next' existe
+    d'une catégorie avec iteration sur numéro de pages à la fin du while tant que bouton 'next' existe
     """
     i = 1
     allbooks_urls_cat = []
@@ -51,9 +52,9 @@ def books_cat_explorer(url_category):
     
 
 def foldering_xcategory(url_category,catalog_folder):
-    """ on extrait d'url-category 'travel_2' et en transforme le nom
-    pour créer un repertoire catégorie du type '2_travel'
-    on crée aussi un répertoire "images" dans le répertoire catégorie
+    """ on extrait d'url-category 'travel_2' dans une liste pour en transformer le nom
+    et créer un répertoire catégorie du type '2_travel'
+    puis on crée un répertoire "images" dans le répertoire catégorie
     """
     parts_category_x = url_category.split('/')[6].split('_')
     categ_folder = os.path.join(catalog_folder, f"{parts_category_x[1]}_{parts_category_x[0]}")
@@ -66,7 +67,7 @@ def csv_file_init(categ_folder):
     """ création du .CSV d'une catégorie dans son dossier et écriture des datas_headers en en-tête
     """
     datas_headers = [
-        'product_page_url', 'universal_product_code(UPC)', 'title',
+        'product_page_url', 'universal_product_code (upc)', 'title',
          'price_including_tax', 'price_excluding_tax', 'number_available',
           'product_description', 'category', 'review_rating',
            'image_url'
@@ -80,7 +81,7 @@ def getdatas_book (book_url):
     """ on récupère toutes les datas=[] d'un livre
     """
     reponse = requests.get(book_url)
-    soup = BeautifulSoup(reponse.text.encode('latin1').decode('utf-8'), 'lxml')
+    soup = BeautifulSoup(reponse.text.encode('utf-8').decode('utf-8'), 'lxml')
     book_url = book_url + " "
     table_tds = soup.findAll('td') 
     prod_dispos = table_tds[5].text[10:-11]
@@ -99,12 +100,13 @@ def getdatas_book (book_url):
     return datas
 
 def write_csv_img(datas,images_folder,book_url):
-    # ajout des datas de chaque livre de la catégorie dans le CSV de la categorie
+    """ ajout des datas de chaque livre de la catégorie dans le CSV de la categorie
+    puis sauvegarde de l'IMAGE nommée à partir du nom du livre dans l'url
+    """
     with open(os.path.join(categ_folder, f"{categ_folder.split('\\')[6].split('_')[1]}.csv"), 'a',
              encoding='utf8', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(datas)
-    # sauvegarder l'IMAGE nommée à partir du nom du livre dans l'url
     with open(os.path.join(images_folder, f"{book_url.rsplit("/", 2)[-2].rsplit("_", 1)[0]}.jpg"), 'wb') as img_f:
         img_data = requests.get(f"{datas[-1]}").content
         img_f.write(img_data)
