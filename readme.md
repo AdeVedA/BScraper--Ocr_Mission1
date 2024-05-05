@@ -28,52 +28,51 @@ pour ordonner les répertoires des catégories selon books.toscrape
 ## I - Setup windows 
 #### ( si [Git](https://github.com/git-for-windows/git/releases/download/v2.45.0.windows.1/Git-2.45.0-64-bit.exe) et [python 3.6+](https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe) ne sont pas installés, commencez par l'annexe 1 !)
 
-  #### A- Créez un repertoire pour le programme
-lancez votre explorateur windows (WIN+E) 
-créez un répertoire (CTRL+MAJ+N) pour le programme où vous le souhaitez et **nommez-le**
+  #### A- Créez un répertoire pour le programme
+Lancez votre explorateur windows (WIN+E) 
+Créez un répertoire (CTRL+MAJ+N) pour le programme où vous le souhaitez et **nommez-le**
 ex. : vous pouvez l'appeler **BScraper** dans d:\chemin\vers\mon\dossier\BScraper
-**double-cliquez** sur le répertoire créé (pour être dedans).
-
-**NOUVEAU !!!** Option ***rapide et simple*** : 
-- téléchargez le fichier Installauto.bat dans votre répertoire et vous le lancez. Si vous avez déjà Git et Python, il installera le programme, l'environnement virtuel, l'activera, y installera les librairies requises.
-- téléchargez le fichier Runauto.bat dans votre répertoire et vous le lancez. Il lancera le programme BScraper.py automatiquement en ayant activé l'environnement virtuel.
-
-sinon, suivez les étapes suivantes :
+**double-cliquez** sur le répertoire créé (pour être dedans - il est vide).
 
   #### B- lancez l'interpréteur de commande windows
-clic gauche dans la barre d'adresse de l'explorateur, écrivez **"cmd"** (à la place de l'adresse)
-et appuyez sur **"entrée"** :
+Clic gauche dans la barre d'adresse de l'explorateur, écrivez **"cmd"** (à la place de l'adresse)
+et appuyez sur **"entrée"** (comme à chaque instruction en ligne future):
 
 	cmd
-
-nous utiliserons la ligne de commande jusqu'au lancement du programme inclus
 	
-  #### C- clonez le repo Github du projet dans ce repertoire
-dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier créé), tapez tour à tour:
+  #### C- clonez le repo Github du projet dans ce répertoire
+dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier créé), écrivez tour à tour:
 
 	git init
 
-	git remote add origin git@github.com:AdeVedA/BScraper--Ocr_Mission1.git
+puis : 
 
-	git pull origin BScraper
+	git pull https://github.com/AdeVedA/BScraper--Ocr_Mission1.git -t main
 
-## II - Configuration
+  #### D- lancez l'installation et le run automatiques, ou bien passez en II configuration manuelle
+pour installer un environnement virtuel, l'activer et lui fournir les librairies nécessaires, lancez 
 
-  #### - installez un environnement virtuel dans un dossier 'env' du projet, toujours par l'invite de commande :
+	installauto.bat
+
+pour activer l'environnement virtuel et lancer le programme de scraping automatiquement, sinon passez en III - lancement du programme
+
+	runauto.bat
+
+## II - Configuration manuelle
+
+  #### a - installez un environnement virtuel dans un dossier 'env' du projet, toujours par l'invite de commande :
 	
 	python -m venv env
  
-  #### - activez l'environnement virtuel créé précédemment :
+  #### b - activez l'environnement virtuel créé précédemment :
 	
 	env\Scripts\activate.bat
  
-  #### - installez les librairies requises :
+  #### c - installez les librairies requises :
 	
 	pip install -r requirements.txt
-
-  ##### Bravo on a fini la préparation de l'environnement ! normalement on n'y touche plus !
 	
-## III - Lancement du programme
+## III - Lancement du programme (avec environnement virtuel activé, faites II b)
 
 	python BScraper.py
 
