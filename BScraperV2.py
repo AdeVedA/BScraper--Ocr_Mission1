@@ -5,8 +5,9 @@ import csv
 
 
 def book_categories(url_home):
-    # à partir de l'url_home récupèrer les adresses mères
-    # de chaque catégorie dans url categorie
+    """ à partir de l'url_home récupèrer les adresses mères
+    de chaque catégorie dans url categorie
+    """
     response = requests.get(url_home)
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'lxml')
@@ -55,7 +56,6 @@ def foldering_xcategory(url_category,catalog_folder):
     on crée aussi un répertoire "images" dans le répertoire catégorie
     """
     parts_category_x = url_category.split('/')[6].split('_')
-    # x_category = f"{parts_category_x[1]}_{parts_category_x[0]}"
     categ_folder = os.path.join(catalog_folder, f"{parts_category_x[1]}_{parts_category_x[0]}")
     os.makedirs(categ_folder, exist_ok=False)
     images_folder = os.path.join(categ_folder, "images")
@@ -63,10 +63,11 @@ def foldering_xcategory(url_category,catalog_folder):
     return categ_folder,images_folder
 
 def csv_file_init(categ_folder):
-    # création du .CSV d'une catégorie et écriture des datas_headers en en-tête
+    """ création du .CSV d'une catégorie dans son dossier et écriture des datas_headers en en-tête
+    """
     datas_headers = [
         'product_page_url', 'universal_product_code(UPC)', 'title',
-         '£_price_including_tax', '£_price_excluding_tax', 'number_available',
+         'price_including_tax', 'price_excluding_tax', 'number_available',
           'product_description', 'category', 'review_rating',
            'image_url'
            ]
@@ -76,7 +77,8 @@ def csv_file_init(categ_folder):
             writer.writerow(datas_headers)
 
 def getdatas_book (book_url):
-    # on récupère toutes les datas=[] d'un livre
+    """ on récupère toutes les datas=[] d'un livre
+    """
     reponse = requests.get(book_url)
     soup = BeautifulSoup(reponse.text.encode('latin1').decode('utf-8'), 'lxml')
     book_url = book_url + " "
@@ -107,12 +109,16 @@ def write_csv_img(datas,images_folder,book_url):
         img_data = requests.get(f"{datas[-1]}").content
         img_f.write(img_data)
 
-
+""" on récupère les urls des catégories sur la page d'accueil 
+    et on crée le repertoire de sauvegarde de la session de scraping
+"""
 url_home = 'http://books.toscrape.com/'
 urls_categories = book_categories(url_home)
 catalog_folder = foldering_catalog()
-# deux boucles 'for' pour télécharger
-# dans chaque catégorie(ses livres=allbooks_urls_cat) chaque livre(datas)
+
+""" deux boucles 'for' pour télécharger dans chaque
+    catégorie(ses livres=allbooks_urls_cat) chaque livre(datas)
+"""
 for url_category in urls_categories[1:]:
     allbooks_urls_cat = books_cat_explorer(url_category)
     categ_folder,images_folder = foldering_xcategory(url_category,catalog_folder)
