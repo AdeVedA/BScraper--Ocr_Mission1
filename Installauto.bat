@@ -4,7 +4,7 @@ git init
 timeout /t 2
 git remote add origin git@github.com:AdeVedA/BScraper--Ocr_Mission1.git
 timeout /t 2
-git pull origin BScraperv2
+git pull origin main
 timeout /t 2
 python -m venv env
 timeout /t 2

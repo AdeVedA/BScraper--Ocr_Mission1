@@ -36,7 +36,7 @@ ex. : vous pouvez l'appeler **BScraper** dans d:\chemin\vers\mon\dossier\BScrape
 
 **NOUVEAU !!!** Option ***rapide et simple*** : 
 - téléchargez le fichier Installauto.bat dans votre répertoire et vous le lancez. Si vous avez déjà Git et Python, il installera le programme, l'environnement virtuel, l'activera, y installera les librairies requises.
-- téléchargez le fichier Runauto.bat dans votre répertoire et vous le lancez. Il lancera le programme BScraperV2 automatiquement en ayant activé l'environnement virtuel.
+- téléchargez le fichier Runauto.bat dans votre répertoire et vous le lancez. Il lancera le programme BScraper.py automatiquement en ayant activé l'environnement virtuel.
 
 sinon, suivez les étapes suivantes :
 
@@ -55,7 +55,7 @@ dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier cr
 
 	git remote add origin git@github.com:AdeVedA/BScraper--Ocr_Mission1.git
 
-	git pull origin BScraperv2
+	git pull origin BScraper
 
 ## II - Configuration
 
@@ -75,7 +75,7 @@ dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier cr
 	
 ## III - Lancement du programme
 
-	python BScraperV2.py
+	python BScraper.py
 
 ## IV - informations sur la structure de données
 
