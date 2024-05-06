@@ -21,11 +21,8 @@ def book_categories(url_home):
 def foldering_catalog():
     """ on crée un dossier catalogue incrémenté dans lequel le run inscrira les datas
     """
-    i = 0
-    while os.path.exists(os.path.join(os.getcwd(), f"Catalogue_v{i}")):
-        i += 1
-    catalog_folder = os.path.join(os.getcwd(), f"Catalogue_v{i}")
-    os.makedirs(catalog_folder, exist_ok=False)
+    catalog_folder = os.path.join(os.getcwd(), f"Catalogue")
+    os.makedirs(catalog_folder, exist_ok=True)
     return catalog_folder
 
 def books_cat_explorer(url_category):
@@ -51,31 +48,29 @@ def books_cat_explorer(url_category):
         url_category = (url_category[:-10] + 'page-' + str(i) + '.html')
     
 
-def foldering_xcategory(url_category,catalog_folder):
+def xcategory_folder_csv(url_category,catalog_folder):
     """ on extrait d'url-category 'travel_2' dans une liste pour en transformer le nom
     et créer un répertoire catégorie du type '2_travel'
     puis on crée un répertoire "images" dans le répertoire catégorie
+    création du .CSV d'une catégorie dans son dossier et écriture des datas_headers en en-tête
     """
     parts_category_x = url_category.split('/')[6].split('_')
     categ_folder = os.path.join(catalog_folder, f"{parts_category_x[1]}_{parts_category_x[0]}")
-    os.makedirs(categ_folder, exist_ok=False)
+    os.makedirs(categ_folder, exist_ok=True)
     images_folder = os.path.join(categ_folder, "images")
-    os.makedirs(images_folder, exist_ok=False)
-    return categ_folder,images_folder
-
-def csv_file_init(categ_folder):
-    """ création du .CSV d'une catégorie dans son dossier et écriture des datas_headers en en-tête
-    """
+    os.makedirs(images_folder, exist_ok=True)
     datas_headers = [
         'product_page_url', 'universal_product_code (upc)', 'title',
          'price_including_tax', 'price_excluding_tax', 'number_available',
           'product_description', 'category', 'review_rating',
            'image_url'
            ]
-    with open(os.path.join(categ_folder, f"{categ_folder.split('\\')[6].split('_')[1]}.csv"), 'w',
+    with open(os.path.join(categ_folder, f"{parts_category_x[0]}.csv"), 'w',
                  encoding='utf8', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(datas_headers)
+            
+    return categ_folder,images_folder
 
 def getdatas_book (book_url):
     """ on récupère toutes les datas=[] d'un livre
@@ -83,7 +78,7 @@ def getdatas_book (book_url):
     reponse = requests.get(book_url)
     soup = BeautifulSoup(reponse.text.encode('utf-8').decode('utf-8'), 'lxml')
     book_url = book_url + " "
-    table_tds = soup.findAll('td') 
+    table_tds = soup.findAll('td') # tableau avec 4datas en lignes[0:6] UPC,...,prix,prix+taxe,...,dispos
     prod_dispos = table_tds[5].text[10:-11]
     titre_h = soup.find('h1').text
     prod_description = soup.find('article', {'class': 'product_page'}).findAllNext('p')[3].contents[0][:-8]   
@@ -123,8 +118,7 @@ catalog_folder = foldering_catalog()
 """
 for url_category in urls_categories[1:]:
     allbooks_urls_cat = books_cat_explorer(url_category)
-    categ_folder,images_folder = foldering_xcategory(url_category,catalog_folder)
-    csv_file_init(categ_folder)
+    categ_folder,images_folder = xcategory_folder_csv(url_category,catalog_folder)
     for book_url in allbooks_urls_cat:
         datas = getdatas_book(book_url)
         write_csv_img(datas,images_folder,book_url)
