@@ -4,5 +4,5 @@ call .\env\Scripts\activate.bat
 timeout /t 2
 python BScraper.py
 pause
-deactivate
+call .\env\scripts\deactivate.bat
 pause
