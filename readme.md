@@ -7,7 +7,7 @@
 ------------------------------------------
 BScraper est un programme de scraping récupérant des datas sur un site de vente en ligne de livres http://books.toscrape.com/
 
-1. il crée un dossier catalogue versionné catalogue_v0 , v1...
+1. il crée un dossier catalogue...
 
 2. il télécharge les liens des catégories
 
@@ -72,26 +72,26 @@ pour activer l'environnement virtuel et lancer le programme de scraping automati
 	
 	pip install -r requirements.txt
 	
-## III - Lancement du programme (avec environnement virtuel activé, faites II b)
+## III - Lancement manuel du programme (avec environnement virtuel activé, faites II b)
 
 	python BScraper.py
 
 ## IV - informations sur la structure de données
 
-les données sont toutes transformées/rassemblées et créées (en .csv) ou téléchargées (en .jpg) dans les sous-répertoires des catégories des livres (2_travel, 3_mystery, 4_...) qui sont dans le répertoire Catalogue_v0 (versionné v1 v2... à chaque lancement du programme).
+les données sont toutes transformées/rassemblées et créées (en .csv) ou téléchargées (en .jpg) dans les sous-répertoires des catégories des livres (2_travel, 3_mystery, 4_...) qui sont dans le répertoire Catalogue.
 Nous avons donc en sortie de run l'architecture de répertoires par catégorie suivante :
 
 	racine_projet/
-	      	    ├───Catalogue_v0/
-	      	    |               ├────2_travel/
-	      	    |               |            ├─────travel.csv
-	      	    |               |            └─────images/
-	      	    |               |            	     ├─────book-name-1.jpg
-	      	    |               |            	     └─────book-name-2.jpg...
-	      	    |               ├────3_mystery/
-	      	    |               ├────51_crime/
-	      	    |               └────x_new/...
-	      	    └───Catalogue_v1/...
+	      	    ├───Catalogue/
+	      	                 ├────2_travel/
+	      	                 |            ├─────travel.csv
+	      	                 |            └─────images/
+	      	                 |            	     ├─────book-name-1.jpg
+	      	                 |            	     └─────book-name-2.jpg...
+	      	                 ├────3_mystery/
+	      	                 ├────51_crime/
+	      	                 └────x_new/...
+	      	    
 
 # Annexe 1 - installation de Python & Git
 
