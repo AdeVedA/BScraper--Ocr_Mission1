@@ -5,8 +5,13 @@ import csv
 
 
 def book_categories(url_home):
-    """ à partir de l'url_home récupèrer les adresses mères
-    de chaque catégorie dans urls_categories
+    """ récupèrer les adresses mères à partir de l'url_home 
+
+    Args:
+        url_home (str): url page d'accueil
+
+    Returns:
+        urls_categories (list): liste des urls des catégories
     """
     response = requests.get(url_home)
     if response.status_code == 200:
@@ -19,16 +24,23 @@ def book_categories(url_home):
     return urls_categories
 
 def foldering_catalog():
-    """ on crée un dossier catalogue incrémenté dans lequel le run inscrira les datas
+    """ créer un dossier catalogue dans lequel le run inscrira les datas
+
+    Returns:
+        catalog_folder (str): adresse du répertoire catalogue
     """
     catalog_folder = os.path.join(os.getcwd(), f"Catalogue")
     os.makedirs(catalog_folder, exist_ok=True)
     return catalog_folder
 
 def books_cat_explorer(url_category):
-    """ input = page d'accueil de la catégorie, on récupère les urls
-    de chaque livre (sortie = liste [allbooks_urls_cat]) dans TOUTES les pages possibles
-    d'une catégorie avec iteration sur numéro de pages à la fin du while tant que bouton 'next' existe
+    """  récupèrer les urls de chaque livre dans TOUTES les pages possibles d'une catégorie
+
+    Args:
+        url_category (str): url d'une catégorie
+
+    Returns:
+        allbooks_urls_cat (list): liste des urls des livres de cette catégorie
     """
     i = 1
     allbooks_urls_cat = []
@@ -49,10 +61,16 @@ def books_cat_explorer(url_category):
     
 
 def xcategory_folder_csv(url_category,catalog_folder):
-    """ on extrait d'url-category 'travel_2' dans une liste pour en transformer le nom
-    et créer un répertoire catégorie du type '2_travel'
-    puis on crée un répertoire "images" dans le répertoire catégorie
+    """ créer un répertoire catégorie du type '2_travel' et un répertoire "images" dans celui-ci
     création du .CSV d'une catégorie dans son dossier et écriture des datas_headers en en-tête
+
+    Args:
+        url_category (str): url de la categorie
+        catalog_folder (str): adresse du repertoire catalogue
+    
+    Returns:
+        categ_folder (str): dossier de la catégorie
+        images_folder (str): dossier des images de la categorie
     """
     parts_category_x = url_category.split('/')[6].split('_')
     categ_folder = os.path.join(catalog_folder, f"{parts_category_x[1]}_{parts_category_x[0]}")
@@ -74,6 +92,12 @@ def xcategory_folder_csv(url_category,catalog_folder):
 
 def getdatas_book (book_url):
     """ on récupère toutes les datas=[] d'un livre
+
+    Args:
+        book_url (str): url d'un livre
+
+    Returns:
+        datas (list): liste des datas d'un livre
     """
     reponse = requests.get(book_url)
     soup = BeautifulSoup(reponse.text.encode('utf-8').decode('utf-8'), 'lxml')
@@ -97,6 +121,14 @@ def getdatas_book (book_url):
 def write_csv_img(datas,images_folder,book_url):
     """ ajout des datas de chaque livre de la catégorie dans le CSV de la categorie
     puis sauvegarde de l'IMAGE nommée à partir du nom du livre dans l'url
+
+    Args:
+        datas (list): liste des datas d'un livre
+        images_folder (str): dossier des images de la categorie
+        book_url (str): url d'un livre
+        
+    Returns:
+        .csv et .jpg dans leur répertoire respectif
     """
     with open(os.path.join(categ_folder, f"{categ_folder.split('\\')[6].split('_')[1]}.csv"), 'a',
              encoding='utf8', newline='') as csvfile:
