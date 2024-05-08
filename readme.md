@@ -25,23 +25,24 @@ pour ordonner les répertoires des catégories selon books.toscrape
 - - b2. téléchargement de l'image du livre en .jpg nommé selon son titre dans un répertoire images du dossier catégorie.
 ------------------------------------------
 ------------------------------------------
-## I - Setup windows 
-#### ( si [Git](https://github.com/git-for-windows/git/releases/download/v2.45.0.windows.1/Git-2.45.0-64-bit.exe) et [python 3.6+](https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe) ne sont pas installés, commencez par l'annexe 1 !)
+## I - Setup windows
 
-  #### A- Créez un répertoire pour le programme
+#### ( si [Git](https://github.com/git-for-windows/git/releases/download/v2.45.0.windows.1/Git-2.45.0-64-bit.exe) et [python 3.6+](https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe) ne sont pas installés, commencez par l'annexe 1 !)
+------------------------------------------
+  #### A - Créez un répertoire pour le programme
 Lancez votre explorateur windows (WIN+E) 
 Créez un répertoire (CTRL+MAJ+N) pour le programme où vous le souhaitez et **nommez-le**
 ex. : vous pouvez l'appeler **BScraper** dans d:\chemin\vers\mon\dossier\BScraper
-**double-cliquez** sur le répertoire créé (pour être dedans - il est vide).
+**double-cliquez** sur le répertoire créé pour aller dedans.
 
-  #### B- lancez l'interpréteur de commande windows
+  #### B - lancez l'interpréteur de commande windows
 Clic gauche dans la barre d'adresse de l'explorateur, écrivez **"cmd"** (à la place de l'adresse)
 et appuyez sur **"entrée"** (comme à chaque instruction en ligne future):
 
 	cmd
 	
-  #### C- clonez le repo Github du projet dans ce répertoire
-dans l'invite de commande (qui indique que vous êtes à l'adresse du dossier créé), écrivez tour à tour:
+  #### C - clonez le repo Github du projet dans ce répertoire
+dans le terminal (l'invite de commande) qui indique bien que vous êtes à l'adresse du dossier créé, écrivez tour à tour:
 
 	git init
 
@@ -49,34 +50,80 @@ puis :
 
 	git pull https://github.com/AdeVedA/BScraper--Ocr_Mission1.git -t main
 
-  #### D- lancez l'installation et le run automatiques, ou bien passez en II configuration manuelle
-pour installer un environnement virtuel, l'activer et lui fournir les librairies nécessaires, lancez 
-
-	installauto.bat
-
-pour activer l'environnement virtuel et lancer le programme de scraping automatiquement, sinon passez en III - lancement du programme
-
-	runauto.bat
-
-## II - Configuration manuelle
-
-  #### a - installez un environnement virtuel dans un dossier 'env' du projet, toujours par l'invite de commande :
+  #### D - installez un environnement virtuel dans un dossier 'env' du projet, toujours par l'invite de commande :
 	
 	python -m venv env
  
-  #### b - activez l'environnement virtuel créé précédemment :
+  #### E - activez l'environnement virtuel créé précédemment :
 	
 	env\Scripts\activate.bat
  
-  #### c - installez les librairies requises :
+  #### F - installez les librairies requises :
 	
 	pip install -r requirements.txt
-	
-## III - Lancement manuel du programme (avec environnement virtuel activé, faites II b)
+
+  #### G - Lancement du programme (l'environnement virtuel doit avoir été activé avant):
 
 	python BScraper.py
 
-## IV - informations sur la structure de données
+  #### H - Désactivez l'environnement virtuel
+
+	deactivate
+-------------------------
+-------------------------
+
+## II - Setup Linux/Mac
+
+#### ( si **[Git](https://sourceforge.net/projects/git-osx-installer/files/git-2.23.0-intel-universal-mavericks.dmg/download?use_mirror=autoselect)** et **[python](https://www.python.org/ftp/python/3.12.3/python-3.12.3-macos11.pkg)** ne sont pas installés, commencez par l'annexe 1 !)
+
+-------------------------
+	
+  #### A- lancez un terminal
+
+clic sur loupe/recherche lancez
+
+	terminal
+	
+  #### B - Créez un répertoire pour le programme et placez-vous dedans
+  par exemple si vous souhaitez appeler ce dossier "BScraper" :
+
+	mkdir BScraper
+
+puis :
+
+	cd BScraper
+
+  #### C - clonez le repo Github du projet dans ce répertoire
+dans le terminal (l'invite de commande) qui indique bien que vous êtes à l'adresse du dossier créé, écrivez tour à tour:
+
+	git init
+
+puis : 
+
+	git pull https://github.com/AdeVedA/BScraper--Ocr_Mission1.git -t main
+
+  #### D - installez un environnement virtuel dans un dossier 'env' du projet, toujours par le terminal :
+	
+	python3 -m venv env
+
+  #### E - activez l'environnement virtuel créé précédemment :
+	
+	source env/bin/activate
+ 
+  #### F - installez les librairies requises :
+	
+	pip install -r requirements.txt
+
+  #### G - Lancement du programme (l'environnement virtuel doit avoir été activé avant):
+
+	python3 BScraper.py
+
+  #### H - Désactivez l'environnement virtuel
+
+	deactivate
+ 
+
+## III - informations sur la structure de données
 
 les données sont toutes transformées/rassemblées et créées (en .csv) ou téléchargées (en .jpg) dans les sous-répertoires des catégories des livres (2_travel, 3_mystery, 4_...) qui sont dans le répertoire Catalogue.
 Nous avons donc en sortie de run l'architecture de répertoires par catégorie suivante :
@@ -94,7 +141,30 @@ Nous avons donc en sortie de run l'architecture de répertoires par catégorie s
 	      	    
 
 # Annexe 1 - installation de Python & Git
+=======================================================================
 
-- Si vous n'avez pas installé Python --> **[python](https://www.python.org/downloads/)** et installez-le en vous assurant que ***"Add to PATH"*** est coché (laissez les autres choix par défaut)
+pour Windows 64bits :
+--------------------
 
-- Si vous n'avez pas installé Git  ---> **[Git](https://github.com/git-for-windows/git/releases/download/v2.45.0.windows.1/Git-2.45.0-64-bit.exe)**
+installez **[Git](https://github.com/git-for-windows/git/releases/download/v2.45.0.windows.1/Git-2.45.0-64-bit.exe)** 
+verifiez en tapant "cmd" dans le menu démarrer puis "git version" dans le terminal
+
+installez **[python](https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe)** en vous assurant que ***"Add to PATH"*** est coché (laissez les autres choix par défaut)
+verifiez en tapant "cmd" dans le menu démarrer puis "python --version" dans le terminal
+
+pour Mac/Linux :
+--------------------
+**Git**
+cliquez sur l'icone de recherche (loupe), écrivez "terminal" (on vérifie si git est déjà présent)
+
+	git version
+
+si ok, passez à python. 
+sinon, installez ce qu'il vous propose d'installer ("command line developer tools") puis recommencez "git version" en terminal,
+sinon : installez **[Git](https://sourceforge.net/projects/git-osx-installer/files/git-2.23.0-intel-universal-mavericks.dmg/download?use_mirror=autoselect)**
+puis revérifiez git version dans le terminal
+
+**Python**
+installez **[python](https://www.python.org/ftp/python/3.12.3/python-3.12.3-macos11.pkg)**
+
+
