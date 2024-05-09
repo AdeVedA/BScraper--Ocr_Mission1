@@ -115,7 +115,7 @@ def getdatas_book (book_url,categ_folder,images_folder):
 
     datas = [
         book_url, table_tds[0].text, titre_h,
-         table_tds[3].text[2:], table_tds[2].text[2:], prod_dispos,
+         table_tds[3].text[1:], table_tds[2].text[1:], prod_dispos,
           str(prod_description), categorie, etoiles,
            'http://books.toscrape.com/' + str(img_couverture)
            ]
