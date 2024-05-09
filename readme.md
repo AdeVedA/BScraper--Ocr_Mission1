@@ -15,8 +15,9 @@ BScraper est un programme de scraping récupérant des datas sur un site de vent
 
 4. il itère pour chaque catégorie (avec fonctions distinctes) la suite :
 
-- a. création d'un dossier au nom réordonné \2_travel \3_mystery
-pour ordonner les répertoires des catégories selon books.toscrape
+- a. création d'un dossier de catégorie au nom réordonné \2_travel \3_mystery
+	pour ordonner les répertoires des catégories selon books.toscrape et
+	création d'un répertoire images dans le répertoire de catégorie.
 
 - b. il itère pour chaque livre de cette catégorie et remplit ce dossier de :
 
